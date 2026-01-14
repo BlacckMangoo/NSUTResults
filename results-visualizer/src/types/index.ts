@@ -12,6 +12,8 @@ export interface Student {
 
 export type View = 'lookup' | 'branch' | 'analytics'
 
+export type Semester = 'sem1' | 'sem3' | 'sem5' | 'sem7'
+
 export interface BranchStats {
   count: number
   sgpas: number[]

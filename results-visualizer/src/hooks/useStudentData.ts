@@ -1,14 +1,22 @@
 import { useState, useEffect } from 'react'
 import Papa from 'papaparse'
-import type { Student } from '../types'
+import type { Student, Semester } from '../types'
 import { parseStudents } from '../utils/csvParser'
 
-export function useStudentData() {
+const CSV_FILES: Record<Semester, string> = {
+  'sem1': '/results_sem1.csv',
+  'sem3': '/results.csv',
+  'sem5': '/results_sem5.csv',
+  'sem7': '/results_sem7.csv',
+}
+
+export function useStudentData(semester: Semester) {
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/results.csv')
+    setLoading(true)
+    fetch(CSV_FILES[semester])
       .then(res => res.text())
       .then(text => {
         const result = Papa.parse<string[]>(text)
@@ -20,7 +28,7 @@ export function useStudentData() {
         console.error('Error loading CSV:', err)
         setLoading(false)
       })
-  }, [])
+  }, [semester])
 
   return { students, loading }
 }

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import type { View, Student } from './types'
+import type { View, Student, Semester } from './types'
 import { useStudentData } from './hooks/useStudentData'
 import { useBranchAnalytics } from './hooks/useBranchAnalytics'
 import { useSubjectAnalytics } from './hooks/useSubjectAnalytics'
@@ -27,20 +27,30 @@ function App() {
   const [view, setView] = useState<View>('lookup')
   const [selectedBranch, setSelectedBranch] = useState('UCS')
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [semester, setSemester] = useState<Semester>('sem3')
+
+  // Batch year based on semester
+  const batchYearMap: Record<Semester, string> = {
+    'sem1': '2025',
+    'sem3': '2024', 
+    'sem5': '2023',
+    'sem7': '2022',
+  }
+  const batchYear = batchYearMap[semester]
 
   // Data hooks
-  const { students, loading } = useStudentData()
+  const { students, loading } = useStudentData(semester)
   const {
-    batch2024Students,
+    batchStudents,
     branches,
     branchChartData,
     overallStats,
     sgpaDistribution,
-  } = useBranchAnalytics(students)
+  } = useBranchAnalytics(students, batchYear)
   const {
     subjectDifficulty,
     highPerformersStats,
-  } = useSubjectAnalytics(batch2024Students)
+  } = useSubjectAnalytics(batchStudents)
 
   // Student search
   const filteredStudents = useStudentSearch(students, search)
@@ -48,10 +58,10 @@ function App() {
   // Branch view data
   const branchStudents = useMemo(() => {
     if (!selectedBranch) return []
-    return batch2024Students
+    return batchStudents
       .filter(s => getBranchCode(s.rollNo) === selectedBranch)
       .sort((a, b) => b.sgpa - a.sgpa)
-  }, [batch2024Students, selectedBranch])
+  }, [batchStudents, selectedBranch])
 
   const branchSubjects = useMemo(() => {
     if (branchStudents.length === 0) return []
@@ -85,7 +95,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header studentCount={students.length} />
+      <Header studentCount={students.length} semester={semester} onSemesterChange={setSemester} />
       <Navigation view={view} onViewChange={setView} />
 
       {loading ? (
@@ -112,7 +122,7 @@ function App() {
         <div className="analytics">
           <div className="section-header">
             <h2>Performance Insights</h2>
-            <p>Overall statistics across all branches (2024 batch)</p>
+            <p>Overall statistics across all branches ({batchYear} batch)</p>
           </div>
 
           <OverallStatsCard stats={overallStats} />

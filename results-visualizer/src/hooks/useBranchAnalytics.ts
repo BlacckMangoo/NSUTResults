@@ -3,27 +3,27 @@ import type { Student, BranchStats, SgpaDistribution } from '../types'
 import { getBranchCode, median } from '../utils/helpers'
 import { BRANCH_CODE_MAP } from '../constants/branchMap'
 
-export function useBranchAnalytics(students: Student[]) {
-  // Filter to 2024 batch only
-  const batch2024Students = useMemo(() => {
-    return students.filter(s => s.rollNo.startsWith('2024'))
-  }, [students])
+export function useBranchAnalytics(students: Student[], batchYear: string = '2024') {
+  // Filter to specified batch only
+  const batchStudents = useMemo(() => {
+    return students.filter(s => s.rollNo.startsWith(batchYear))
+  }, [students, batchYear])
 
   // Get unique branches
   const branches = useMemo(() => {
     const codes = new Set<string>()
-    batch2024Students.forEach(s => {
+    batchStudents.forEach(s => {
       const code = getBranchCode(s.rollNo)
       if (code) codes.add(code)
     })
     return Array.from(codes).sort()
-  }, [batch2024Students])
+  }, [batchStudents])
 
   // Calculate branch stats
   const branchStats = useMemo(() => {
     const stats: Record<string, BranchStats> = {}
     
-    batch2024Students.forEach(s => {
+    batchStudents.forEach(s => {
       const code = getBranchCode(s.rollNo)
       if (!code) return
       
@@ -43,7 +43,7 @@ export function useBranchAnalytics(students: Student[]) {
     })
     
     return stats
-  }, [batch2024Students])
+  }, [batchStudents])
 
   // Chart data for branch comparison
   const branchChartData = useMemo(() => {
@@ -62,7 +62,7 @@ export function useBranchAnalytics(students: Student[]) {
 
   // Overall statistics
   const overallStats = useMemo(() => {
-    const sgpas = batch2024Students.map(s => s.sgpa)
+    const sgpas = batchStudents.map(s => s.sgpa)
     if (sgpas.length === 0) return { avg: 0, median: 0, max: 0, min: 0, total: 0 }
     return {
       avg: sgpas.reduce((a, b) => a + b, 0) / sgpas.length,
@@ -71,7 +71,7 @@ export function useBranchAnalytics(students: Student[]) {
       min: Math.min(...sgpas),
       total: sgpas.length
     }
-  }, [batch2024Students])
+  }, [batchStudents])
 
   // SGPA distribution buckets
   const sgpaDistribution = useMemo(() => {
@@ -85,19 +85,19 @@ export function useBranchAnalytics(students: Student[]) {
       { range: '<4', min: 0, max: 4, count: 0 },
     ]
     
-    batch2024Students.forEach(s => {
+    batchStudents.forEach(s => {
       const bucket = buckets.find(b => s.sgpa >= b.min && s.sgpa < b.max) || buckets[buckets.length - 1]
       if (s.sgpa === 10) buckets[0].count++
       else bucket.count++
     })
     
     return buckets
-  }, [batch2024Students])
+  }, [batchStudents])
 
   // Top performers per branch
   const topPerformers = useMemo(() => {
     const top: Record<string, Student> = {}
-    batch2024Students.forEach(s => {
+    batchStudents.forEach(s => {
       const code = getBranchCode(s.rollNo)
       if (!code) return
       if (!top[code] || s.sgpa > top[code].sgpa) {
@@ -107,10 +107,10 @@ export function useBranchAnalytics(students: Student[]) {
     return Object.entries(top)
       .map(([code, student]) => ({ code, name: BRANCH_CODE_MAP[code] || code, student }))
       .sort((a, b) => b.student.sgpa - a.student.sgpa)
-  }, [batch2024Students])
+  }, [batchStudents])
 
   return {
-    batch2024Students,
+    batchStudents,
     branches,
     branchStats,
     branchChartData,
