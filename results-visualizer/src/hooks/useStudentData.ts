@@ -4,10 +4,10 @@ import type { Student, Semester } from '../types'
 import { parseStudents } from '../utils/csvParser'
 
 const CSV_FILES: Record<Semester, string> = {
-  'sem1': '/results_sem1.csv',
-  'sem3': '/results.csv',
-  'sem5': '/results_sem5.csv',
-  'sem7': '/results_sem7.csv',
+  'sem1': 'results_sem1.csv',
+  'sem3': 'results.csv',
+  'sem5': 'results_sem5.csv',
+  'sem7': 'results_sem7.csv',
 }
 
 export function useStudentData(semester: Semester) {
@@ -16,7 +16,8 @@ export function useStudentData(semester: Semester) {
 
   useEffect(() => {
     setLoading(true)
-    fetch(CSV_FILES[semester])
+    const baseUrl = import.meta.env.BASE_URL || '/'
+    fetch(`${baseUrl}${CSV_FILES[semester]}`)
       .then(res => res.text())
       .then(text => {
         const result = Papa.parse<string[]>(text)
