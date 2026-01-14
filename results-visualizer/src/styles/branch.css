@@ -1,0 +1,134 @@
+/* Branch Selector */
+.branch-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.branch-select {
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: pointer;
+  flex: 1;
+  max-width: 300px;
+}
+
+.branch-select:focus {
+  border-color: var(--accent);
+}
+
+.student-count {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+}
+
+/* Table Styles */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.results-table th,
+.results-table td {
+  padding: 0.75rem 0.625rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.results-table th {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.results-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.results-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background: var(--bg-card);
+  z-index: 5;
+  text-align: center;
+  width: 50px;
+}
+
+.sticky-col-2 {
+  position: sticky;
+  left: 50px;
+  background: var(--bg-card);
+  z-index: 5;
+  text-align: left;
+  min-width: 120px;
+}
+
+.sticky-col-3 {
+  position: sticky;
+  left: 170px;
+  background: var(--bg-card);
+  z-index: 5;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 0.6875rem;
+}
+
+.results-table tbody tr:hover .sticky-col,
+.results-table tbody tr:hover .sticky-col-2,
+.results-table tbody tr:hover .sticky-col-3 {
+  background: var(--bg-secondary);
+}
+
+.results-table th.sticky-col,
+.results-table th.sticky-col-2,
+.results-table th.sticky-col-3 {
+  background: var(--bg-secondary);
+  z-index: 15;
+}
+
+.rank {
+  color: var(--text-secondary);
+}
+
+.name-cell {
+  font-weight: 500;
+}
+
+.roll-cell {
+  color: var(--text-secondary);
+}
+
+.sgpa-col {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.no-grade {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}

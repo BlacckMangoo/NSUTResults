@@ -1,0 +1,20 @@
+export const BRANCH_CODE_MAP: Record<string, string> = {
+  "UME": "MECHANICAL",
+  "UCM": "MAC",
+  "UEA": "ECAM",
+  "UCA": "CSAI",
+  "UEV": "VLSI",
+  "UIT": "IT",
+  "UCS": "CSE",
+  "UEE": "ELECTRICAL",
+  "UEC": "ECE",
+  "UIC": "ICE",
+  "UCD": "CSDS",
+  "UCB": "CSDA",
+  "UIN": "ITNS",
+  "UBT": "BIOTECH",
+  "UGI": "GEOINFORMATICS",
+  "UCI": "CSIOT",
+  "UMV": "MEEV",
+  "UCE": "CIVIL"
+}

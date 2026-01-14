@@ -450,6 +450,12 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.chart-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
   margin: 0 0 1rem 0;
 }
 
